@@ -1,4 +1,7 @@
 package com.BankingAPI.BankingAPI.repositories;
 
-public interface AccountsRepository {
+import com.BankingAPI.BankingAPI.models.Account;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface AccountsRepository extends JpaRepository<Account, Long> {
 }

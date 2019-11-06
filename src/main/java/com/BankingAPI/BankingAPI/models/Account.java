@@ -13,7 +13,9 @@ public class Account {
     private String nickname;
     private Integer rewards;
     private Double balance;
-    Customer customer;
+
+    @OneToOne
+    private Customer customer;
 
     public Long getId() {
         return id;
@@ -63,7 +65,7 @@ public class Account {
         this.customer = customer;
     }
 
-    @Override
+    /*@Override
     public String toString() {
         return "Account{" +
                 "id=" + id +
@@ -73,5 +75,5 @@ public class Account {
                 ", balance=" + balance +
                 ", customer=" + customer +
                 '}';
-    }
+    }*/
 }

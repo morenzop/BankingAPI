@@ -1,7 +1,7 @@
 package com.BankingAPI.BankingAPI.services;
 
 import com.BankingAPI.BankingAPI.Bill;
-import com.BankingAPI.BankingAPI.repository.BillRepository;
+import com.BankingAPI.BankingAPI.repositories.BillRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +29,7 @@ public class BillService {
         return listOfBills;
     }
 
-    public Optional<Bill> getByBillId(Long id) {
+    public Optional getByBillId(Long id) {
 
         return billRepository.findById(id);
     }

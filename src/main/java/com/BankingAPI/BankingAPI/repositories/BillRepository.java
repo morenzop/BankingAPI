@@ -1,4 +1,4 @@
-package com.BankingAPI.BankingAPI.repository;
+package com.BankingAPI.BankingAPI.repositories;
 
 import com.BankingAPI.BankingAPI.Bill;
 import org.springframework.data.repository.CrudRepository;

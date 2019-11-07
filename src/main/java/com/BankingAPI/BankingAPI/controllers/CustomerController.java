@@ -2,6 +2,10 @@ package com.BankingAPI.BankingAPI.controllers;
 
 import com.BankingAPI.BankingAPI.models.Account;
 import com.BankingAPI.BankingAPI.models.Customer;
+<<<<<<< HEAD
+=======
+import com.BankingAPI.BankingAPI.models.Deposit;
+>>>>>>> dsf
 import com.BankingAPI.BankingAPI.models.Response;
 import com.BankingAPI.BankingAPI.repositories.AccountsRepository;
 import com.BankingAPI.BankingAPI.repositories.CustomerRepository;

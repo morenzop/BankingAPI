@@ -1,19 +1,20 @@
-package com.BankingAPI.BankingAPI.customers;
+package com.BankingAPI.BankingAPI.models;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Set;
 
+@Entity
 public class Customer {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue
     private Long id;
 
     private String first_name;
     private String last_name;
-   Set <Address> address;
+
+    @ManyToOne(targetEntity = Address.class)
+    private Set <Address> address;
 
     public Long getId() {
         return id;

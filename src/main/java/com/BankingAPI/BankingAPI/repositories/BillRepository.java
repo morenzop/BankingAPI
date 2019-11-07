@@ -1,13 +1,13 @@
 package com.BankingAPI.BankingAPI.repositories;
 
-import com.BankingAPI.BankingAPI.Bill;
+import com.BankingAPI.BankingAPI.models.Bill;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface BillRepository<Bills> extends CrudRepository<Bill, Long> {
+public interface BillRepository extends CrudRepository<Bill, Long> {
 
-    List<Bills> findAccountById(long accountId);
+    List<Bill> findAccountById(long accountId);
 }

@@ -1,6 +1,6 @@
 package com.BankingAPI.BankingAPI.controllers;
 
-import com.BankingAPI.BankingAPI.Bill;
+import com.BankingAPI.BankingAPI.models.Bill;
 import com.BankingAPI.BankingAPI.services.BillService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,18 +15,18 @@ public class BillController {
     private BillService billService;
 
     @RequestMapping(method = RequestMethod.GET, value = "/accounts/{accountID}/bills")
-    public List<Bill> getAllBillsForAcc() {
-        return billService.getAllBills();
+    public List<Bill> getAllBillsForAcc(@PathVariable Long id, @RequestBody Bill bill) {
+        return billService.getAllBillsByAcc(id);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/bills/{billId}")
-    public Optional<Bill> getBill(@PathVariable Long id) {
-        return billService.getByBillId(id);
+    public Optional<Bill> getBillById(@PathVariable Long id) {
+        return billService.getBillById(id);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/customers/{customerId}/bills")
-    public List<Bill> getAllBillsForCus() {
-        return billService.getAllBills();
+    public List<Bill> getAllBillsForCus(@PathVariable Long id, @RequestBody Bill bill) {
+        return billService.getAllBillsForCus(id);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/accounts/{accountId}/bills")

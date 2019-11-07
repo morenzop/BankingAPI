@@ -13,6 +13,7 @@ public class AccountController {
 
     @Autowired
 AccountsRepository accountsRepository;
+
     @GetMapping("/accounts")
     public List<Account>List(){
         return accountsRepository.findAll();

@@ -1,8 +1,11 @@
 package com.BankingAPI.BankingAPI.controllers;
 
 import com.BankingAPI.BankingAPI.models.Account;
+import com.BankingAPI.BankingAPI.models.Response;
 import com.BankingAPI.BankingAPI.repositories.AccountsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
@@ -14,8 +17,10 @@ public class AccountController {
     AccountsRepository accountsRepository;
 
     @GetMapping("/accounts")
-    public List<Account>List(){
-        return accountsRepository.findAll();
+    public ResponseEntity<?> List(){
+        HttpStatus statusCode;
+        Response response = new Response();
+        if(accountsRepository.findAll() == (accountsRepository));
     }
     @GetMapping("/account/id")
     public Optional<Account> getAccount(Long id){

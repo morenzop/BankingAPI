@@ -4,7 +4,6 @@ import com.BankingAPI.BankingAPI.models.Account;
 import com.BankingAPI.BankingAPI.repositories.AccountsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -12,7 +11,8 @@ import java.util.Optional;
 public class AccountController {
 
     @Autowired
-AccountsRepository accountsRepository;
+    AccountsRepository accountsRepository;
+
     @GetMapping("/accounts")
     public List<Account>List(){
         return accountsRepository.findAll();
@@ -33,7 +33,11 @@ AccountsRepository accountsRepository;
     }
     @PutMapping("/account/{id}")
     public void upDateAccounts(@RequestBody Account account, @PathVariable("id") long id){
-        account.setId(id);
+
+
+    }
+    @DeleteMapping("/account/{id}")
+    public void deleteAccounts(@RequestBody Account account, @PathVariable("id") long id){
 
     }
 }

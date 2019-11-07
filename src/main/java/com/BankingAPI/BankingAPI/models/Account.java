@@ -2,12 +2,13 @@ package com.BankingAPI.BankingAPI.models;
 
 import javax.persistence.*;
 
+//an entity represents a table in a relational database, and each entity instance corresponds to a row in that table
 @Entity
 public class Account {
     @Id
     @GeneratedValue
     private Long id;
-
+// A list of named constant and defines a class type, Enumerations can have constructors, methods and instance variables.
     @Enumerated(EnumType.STRING)
     private AccountType type;
     private String nickname;

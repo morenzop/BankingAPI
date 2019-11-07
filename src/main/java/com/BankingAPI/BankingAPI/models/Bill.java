@@ -1,6 +1,4 @@
-package com.BankingAPI.BankingAPI;
-
-import ch.qos.logback.core.status.Status;
+package com.BankingAPI.BankingAPI.models;
 
 import javax.persistence.*;
 
@@ -21,9 +19,11 @@ public class Bill {
     private String account_id;
 
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private BillStatus status;
 
-    public Bill(Long id, String payee, String nickname, String creation_date, String payment_date, Integer recurring_date, String upcoming_payment_date, Double payment_amount, String account_id, Status status) {
+    public Bill(){}
+
+    public Bill(Long id, String payee, String nickname, String creation_date, String payment_date, Integer recurring_date, String upcoming_payment_date, Double payment_amount, String account_id, BillStatus status) {
         this.id = id;
         this.payee = payee;
         this.nickname = nickname;
@@ -108,11 +108,11 @@ public class Bill {
         this.account_id = account_id;
     }
 
-    public Status getStatus() {
+    public BillStatus getStatus() {
         return status;
     }
 
-    public void setStatus(Status status) {
+    public void setStatus(BillStatus status) {
         this.status = status;
     }
 }

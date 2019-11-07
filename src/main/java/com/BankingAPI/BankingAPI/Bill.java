@@ -115,4 +115,20 @@ public class Bill {
     public void setStatus(Status status) {
         this.status = status;
     }
+
+    @Override
+    public String toString() {
+        return "Bill{" +
+                "id=" + id +
+                ", payee='" + payee + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", creation_date='" + creation_date + '\'' +
+                ", payment_date='" + payment_date + '\'' +
+                ", recurring_date=" + recurring_date +
+                ", upcoming_payment_date='" + upcoming_payment_date + '\'' +
+                ", payment_amount=" + payment_amount +
+                ", account_id='" + account_id + '\'' +
+                ", status=" + status +
+                '}';
+    }
 }

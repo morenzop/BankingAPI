@@ -2,10 +2,7 @@ package com.BankingAPI.BankingAPI.controllers;
 
 import com.BankingAPI.BankingAPI.models.Account;
 import com.BankingAPI.BankingAPI.models.Customer;
-<<<<<<< HEAD
-=======
 import com.BankingAPI.BankingAPI.models.Deposit;
->>>>>>> dsf
 import com.BankingAPI.BankingAPI.models.Response;
 import com.BankingAPI.BankingAPI.repositories.AccountsRepository;
 import com.BankingAPI.BankingAPI.repositories.CustomerRepository;
@@ -41,11 +38,9 @@ public class CustomerController {
             response.setMessage("Error fetching accounts");
             statusCode = HttpStatus.NOT_FOUND;
         }else{
-            customerRepository.findAll().
 
         }
-
-        return customerRepository.findAll();
+        return new ResponseEntity<>(null, HttpStatus.OK);
     }
 
     @GetMapping("/accounts/customerId}/customers")

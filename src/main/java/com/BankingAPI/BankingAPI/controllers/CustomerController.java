@@ -38,17 +38,12 @@ public class CustomerController {
     public ResponseEntity<?> getAllCustomers(){
         Response response=new Response();
         HttpStatus statusCode;
-        if (customerRepository.findAll().isEmpty()) {
-            response.setCode(404);
-            response.setMessage("Error fetching accounts");
-            statusCode = HttpStatus.NOT_FOUND;
-        }else{
+
             List<Customer> c = customerRepository.findAll();
             response.setCode(200);
             response.setMessage("Success");
             response.setData(c);
             statusCode = HttpStatus.OK;
-        }
         return new ResponseEntity<>(response, statusCode);
     }
 

@@ -8,5 +8,5 @@ import java.util.List;
 import java.util.Optional;
 
 public interface AccountsRepository extends JpaRepository<Account, Long> {
-    List<Account> findAllByCustomer(Optional<Customer> customer);
+    List<Account> findAllByCustomerId(long customerId);
 }

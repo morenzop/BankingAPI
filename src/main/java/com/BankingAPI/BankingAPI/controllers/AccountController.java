@@ -74,10 +74,12 @@ public class AccountController {
             customerRepository.findById(id);
 //            Trying to find customers by ID.
             Optional<Customer> customer = customerRepository.findById(id);
-            List<?> y = accountsRepository.findAllByCustomer(customer);
+            customer.ifPresent(customer1 -> {
+                List<?> y = accountsRepository.findAllByCustomerId(customer.get().getId());
+                response.setData(y);
+            });
             response.setCode(200);
             response.setMessage("Success");
-            response.setData(y);
             statusCode = HttpStatus.OK;
         }
         return new ResponseEntity<>(response, statusCode);

@@ -1,21 +1,24 @@
 package com.BankingAPI.BankingAPI.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 
+//an entity represents a table in a relational database, and each entity instance corresponds to a row in that table
 @Entity
 public class Account {
     @Id
     @GeneratedValue
     private Long id;
-
+// A list of named constant and defines a class type, Enumerations can have constructors, methods and instance variables.
     @Enumerated(EnumType.STRING)
     private AccountType type;
     private String nickname;
-    private Integer rewards;
-    private Double balance;
-
-    @OneToOne
-    private Customer customer;
+    private int rewards;
+    private double balance;
+//Defines a single-valued association to another entity that has one-to-one multiplicity
+    @JsonProperty("customer_id")
+    private long customerId;
 
     public Long getId() {
         return id;
@@ -57,12 +60,12 @@ public class Account {
         this.balance = balance;
     }
 
-    public Customer getCustomer() {
-        return customer;
+    public long getCustomerId() {
+        return customerId;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public void setCustomerId(long customerId) {
+        this.customerId = customerId;
     }
 
     /*@Override

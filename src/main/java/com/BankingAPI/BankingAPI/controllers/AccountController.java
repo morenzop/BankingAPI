@@ -73,7 +73,7 @@ public class AccountController {
             customerRepository.findById(id);
 //            Trying to find customers by ID.
             Optional<Customer> customer = customerRepository.findById(id);
-            List<?> y = accountsRepository.findAllByCustomer(customer);
+            List<?> y = accountsRepository.findAllByCustomerId(customer);
             response.setCode(200);
             response.setMessage("Success");
             response.setData(y);
@@ -92,6 +92,7 @@ public class AccountController {
             statusCode = HttpStatus.NOT_FOUND;
         }else{
             account.setCustomerId(customer.get().getId());
+//            StatusCode for 201
             response.setCode(201);
             response.setMessage("Account created");
             statusCode = HttpStatus.OK;

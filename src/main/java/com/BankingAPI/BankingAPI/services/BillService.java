@@ -1,6 +1,7 @@
 package com.BankingAPI.BankingAPI.services;
 
 import com.BankingAPI.BankingAPI.Bill;
+import com.BankingAPI.BankingAPI.models.Bill;
 import com.BankingAPI.BankingAPI.repositories.BillRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

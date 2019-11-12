@@ -8,6 +8,12 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * Hopefully this class is depricated.
+ * I'll find out once I can test the methods declared in the repository.
+ */
+
 @Component
 public class DepositService {
 

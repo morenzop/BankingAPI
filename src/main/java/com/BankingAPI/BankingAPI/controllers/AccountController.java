@@ -22,6 +22,7 @@ public class AccountController {
     @Autowired
     CustomerRepository customerRepository;
 
+
     @GetMapping("/accounts")
     public ResponseEntity<?> List(){
         HttpStatus statusCode;

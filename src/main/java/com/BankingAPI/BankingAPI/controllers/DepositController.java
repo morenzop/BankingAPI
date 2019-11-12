@@ -4,7 +4,6 @@ import com.BankingAPI.BankingAPI.models.Deposit;
 import com.BankingAPI.BankingAPI.models.Response;
 import com.BankingAPI.BankingAPI.repositories.AccountsRepository;
 import com.BankingAPI.BankingAPI.repositories.DepositsRepository;
-import com.BankingAPI.BankingAPI.services.DepositService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +19,6 @@ public class DepositController {
 
     @Autowired
     private DepositsRepository depositsRepository;
-
-    @Autowired
-    private DepositService depositService;
 
     @Autowired
     private AccountsRepository accountsRepository;
@@ -53,7 +49,7 @@ public class DepositController {
             response.setMessage("Account not found");
             statusCode = HttpStatus.NOT_FOUND;
         } else {
-            List<Deposit> d = depositService.findAllByAccountId(id);
+            List<Deposit> d = depositsRepository.findAllByPayeeId(id);
             response.setCode(200);
             response.setData(d);
             statusCode = HttpStatus.OK;

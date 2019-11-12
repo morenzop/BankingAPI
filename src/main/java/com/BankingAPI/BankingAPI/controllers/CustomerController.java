@@ -1,11 +1,13 @@
 package com.BankingAPI.BankingAPI.controllers;
 
 import com.BankingAPI.BankingAPI.models.Account;
+import com.BankingAPI.BankingAPI.models.Address;
 import com.BankingAPI.BankingAPI.models.Customer;
 import com.BankingAPI.BankingAPI.models.Response;
 import com.BankingAPI.BankingAPI.repositories.AccountsRepository;
 import com.BankingAPI.BankingAPI.repositories.CustomerRepository;
 import com.BankingAPI.BankingAPI.services.CustomerService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,13 +18,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.io.DataInput;
+import java.io.IOException;
+import java.util.*;
 
 @RestController
 public class CustomerController {
+
+    ObjectMapper mapper = new ObjectMapper();
 
     @Autowired
     private CustomerRepository customerRepository;
@@ -82,10 +85,17 @@ public class CustomerController {
         return new ResponseEntity<>(response, statusCode);
     }
     @PostMapping("/customers")
-    public ResponseEntity<?> createCustomer(@RequestBody Customer customer){
+    public ResponseEntity<?> createCustomer(@RequestBody Customer customer) throws IOException {
         Response response= new Response();
         response.setCode(201);
         response.setMessage("Customer account created");
+        Customer c = new Customer();
+        c.setFirst_name(customer.getFirst_name());
+        c.setLast_name(customer.getLast_name());
+        c.setEmail(customer.getEmail());
+        c.setId(customer.getId());
+        c.setPassword(customer.getPassword());
+        // c.setAddress(Arrays.asList(addresses));
         response.setData(new ArrayList<>(Collections.singleton(customer)));
         customerRepository.save(customer);
         return new ResponseEntity<>(response, HttpStatus.CREATED);

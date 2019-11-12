@@ -43,9 +43,13 @@ public class CustomerController {
             response.setMessage("Error fetching accounts");
             statusCode = HttpStatus.NOT_FOUND;
         }else{
-
+            List<Customer> c = customerRepository.findAll();
+            response.setCode(200);
+            response.setMessage("Success");
+            response.setData(c);
+            statusCode = HttpStatus.OK;
         }
-        return new ResponseEntity<>(null, HttpStatus.OK);
+        return new ResponseEntity<>(response, statusCode);
     }
 
     @GetMapping("/accounts/customerId}/customers")

@@ -12,6 +12,8 @@ public class Customer {
 
     private String first_name;
     private String last_name;
+    private String email;
+    private String password;
 
     @ManyToOne(targetEntity = Address.class)
     private Set <Address> address;
@@ -46,5 +48,21 @@ public class Customer {
 
     public void setAddress(Set<Address> address) {
         this.address = address;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

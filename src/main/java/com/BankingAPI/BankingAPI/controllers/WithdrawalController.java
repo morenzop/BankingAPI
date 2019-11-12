@@ -3,7 +3,6 @@ package com.BankingAPI.BankingAPI.controllers;
 import com.BankingAPI.BankingAPI.models.Response;
 import com.BankingAPI.BankingAPI.models.Withdrawal;
 import com.BankingAPI.BankingAPI.repositories.WithdrawalsRepository;
-import com.BankingAPI.BankingAPI.services.WithdrawalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +19,6 @@ public class WithdrawalController {
     @Autowired
     private WithdrawalsRepository withdrawalsRepository;
 
-    @Autowired
-    private WithdrawalService withdrawalService;
-
     @GetMapping("/withdrawals/{id}")
     public ResponseEntity<?> getWithdrawalById(@PathVariable long id){
         Optional<Withdrawal> d = withdrawalsRepository.findById(id);
@@ -34,7 +30,7 @@ public class WithdrawalController {
 
     @GetMapping("/accounts/{id}/withdrawals")
     public ResponseEntity<?> getWithdrawalsForAccount(@PathVariable String id){
-        List<Withdrawal> d = withdrawalService.findAllByAccountId(id);
+        List<Withdrawal> d = withdrawalsRepository.findAllByPayerId(id);
         Response response = new Response();
         response.setCode(200);
         response.setData(d);

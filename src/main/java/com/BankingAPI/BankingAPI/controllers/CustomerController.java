@@ -1,12 +1,8 @@
 package com.BankingAPI.BankingAPI.controllers;
 
-import com.BankingAPI.BankingAPI.models.Account;
 import com.BankingAPI.BankingAPI.models.Customer;
 import com.BankingAPI.BankingAPI.models.Response;
-import com.BankingAPI.BankingAPI.repositories.AccountsRepository;
-import com.BankingAPI.BankingAPI.repositories.CustomerRepository;
 import com.BankingAPI.BankingAPI.services.CustomerService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,22 +18,14 @@ import java.util.*;
 @RestController
 public class CustomerController {
 
-    ObjectMapper mapper = new ObjectMapper();
-
-    @Autowired
-    private CustomerRepository customerRepository;
-
     @Autowired
     private CustomerService customerService;
-
-    @Autowired
-   private AccountsRepository accountsRepository;
 
     @GetMapping("/customers")
     public ResponseEntity<?> getAllCustomers(){
         Response response=new Response();
         HttpStatus statusCode;
-        List<Customer> c = customerRepository.findAll();
+        List<Customer> c = customerService.findAll();
         response.setCode(200);
         response.setMessage("Success");
         response.setData(c);
@@ -45,36 +33,19 @@ public class CustomerController {
         return new ResponseEntity<>(response, statusCode);
     }
 
-    @GetMapping("/accounts/{customerId}/customers")
-    public ResponseEntity<?> getAccountForCustomer(@PathVariable("customerId") long id){
-        Response response = new Response();
-        HttpStatus statusCode;
-        if (!accountsRepository.existsById(id)){
-            response.setCode(404);
-            response.setMessage("Error fetching customer accounts");
-            statusCode = HttpStatus.NOT_FOUND;
-        } else {
-            List<Account> a = customerService.findAccountsByCustomerId(id);
-            response.setCode(200);
-            response.setData(a);
-            statusCode = HttpStatus.OK;
-        }
-        return new ResponseEntity<>(response, statusCode);
-    }
-
     @GetMapping("/customers/{id}")
     public ResponseEntity<?> getCustomerById(@PathVariable long id) {
         HttpStatus statusCode;
         Response response = new Response();
-        if (!customerRepository.existsById(id)) {
+        Optional<Customer> c = customerService.findById(id);
+        if (!c.isPresent()) {
             response.setCode(404);
             response.setMessage("Error fetching account: " + id);
             statusCode = HttpStatus.NOT_FOUND;
         } else {
-            Optional<Customer> c = customerRepository.findById(id);
             response.setCode(200);
             response.setMessage("Success");
-            response.setData(new ArrayList<>(Collections.singleton(c)));
+            response.setData(new ArrayList<>(Collections.singleton(c.get())));
             statusCode = HttpStatus.OK;
         }
         return new ResponseEntity<>(response, statusCode);
@@ -85,8 +56,7 @@ public class CustomerController {
         response.setCode(201);
         response.setMessage("Customer account created");
         response.setData(new ArrayList<>(Collections.singleton(customer)));
-        customerRepository.save(customer);
+        customerService.save(customer);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
-
 }

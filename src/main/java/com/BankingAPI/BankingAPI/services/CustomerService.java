@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class CustomerService {
@@ -26,5 +27,13 @@ public class CustomerService {
             }
         }
         return result;
+    }
+
+    public Optional<Customer> findById(long id) {
+        return customerRepository.findById(id);
+    }
+
+    public boolean existsById(Long id) {
+        return customerRepository.existsById(id);
     }
 }

@@ -62,7 +62,6 @@ public class DepositController {
 
     @PutMapping("/deposits/{id}")
     public ResponseEntity<?> updateDeposit(@RequestBody Deposit deposit, @PathVariable Long id) {
-        depositService.deleteById(id);
         depositService.updateDeposit(deposit, id);
         return new ResponseEntity<>(null, HttpStatus.OK);
     }

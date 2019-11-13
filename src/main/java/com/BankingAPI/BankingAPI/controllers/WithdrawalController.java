@@ -60,7 +60,6 @@ public class WithdrawalController {
 
     @PutMapping("/withdrawals/{id}")
     public ResponseEntity<?> updateWithdrawal(@RequestBody Withdrawal withdrawal, @PathVariable Long id) {
-        withdrawalService.deleteById(id);
         withdrawalService.updateWithdrawal(withdrawal, id);
         return new ResponseEntity<>(null, HttpStatus.OK);
     }

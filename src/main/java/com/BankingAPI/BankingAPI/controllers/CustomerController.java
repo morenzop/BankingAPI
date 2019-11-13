@@ -84,12 +84,6 @@ public class CustomerController {
         Response response= new Response();
         response.setCode(201);
         response.setMessage("Customer account created");
-        Customer c = new Customer();
-        c.setFirst_name(customer.getFirst_name());
-        c.setLast_name(customer.getLast_name());
-        c.setEmail(customer.getEmail());
-        c.setId(customer.getId());
-        c.setPassword(customer.getPassword());
         response.setData(new ArrayList<>(Collections.singleton(customer)));
         customerRepository.save(customer);
         return new ResponseEntity<>(response, HttpStatus.CREATED);

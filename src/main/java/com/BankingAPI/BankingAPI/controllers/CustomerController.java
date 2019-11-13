@@ -45,8 +45,8 @@ public class CustomerController {
         return new ResponseEntity<>(response, statusCode);
     }
 
-    @GetMapping("/accounts/customerId}/customers")
-    public ResponseEntity<?> getAccountForCustomer(@PathVariable long id){
+    @GetMapping("/accounts/{customerId}/customers")
+    public ResponseEntity<?> getAccountForCustomer(@PathVariable("customerId") long id){
         Response response = new Response();
         HttpStatus statusCode;
         if (!accountsRepository.existsById(id)){

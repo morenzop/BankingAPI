@@ -1,6 +1,6 @@
 package com.BankingAPI.BankingAPI.controllers;
 
-import com.BankingAPI.BankingAPI.Bill;
+import com.BankingAPI.BankingAPI.models.Bill;
 import com.BankingAPI.BankingAPI.services.BillService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

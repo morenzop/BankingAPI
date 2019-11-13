@@ -47,4 +47,8 @@ public class BillService {
         billRepository.deleteById(id);
     }
 
+    public boolean existsById(Long id) {
+        return billRepository.existsById(id);
+    }
+
 }

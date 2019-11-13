@@ -3,8 +3,7 @@ package com.BankingAPI.BankingAPI.controllers;
 import com.BankingAPI.BankingAPI.models.Account;
 import com.BankingAPI.BankingAPI.models.Customer;
 import com.BankingAPI.BankingAPI.models.Response;
-import com.BankingAPI.BankingAPI.repositories.AccountsRepository;
-import com.BankingAPI.BankingAPI.repositories.CustomerRepository;
+import com.BankingAPI.BankingAPI.services.AccountService;
 import com.BankingAPI.BankingAPI.services.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,10 +18,13 @@ import java.util.Optional;
 @RestController
 public class AccountController {
 
+
+
     @Autowired
-    AccountsRepository accountsRepository;
+    AccountService accountService;
+
     @Autowired
-    CustomerRepository customerRepository;
+    CustomerService customerService;
 
 
     @GetMapping("/accounts")
@@ -30,13 +32,13 @@ public class AccountController {
         HttpStatus statusCode;
         Response response = new Response();
 //        To check if a list is empty add .isEmpty to your method.
-        if(accountsRepository.findAll().isEmpty()){
+        if(accountService.findAll().isEmpty()){
             response.setCode(404);
             response.setMessage("error fetching accounts");
 //            StatusCode for 404.
                 statusCode = HttpStatus.NOT_FOUND;
         }else {
-            List<Account> r = accountsRepository.findAll();
+            List<Account> r = accountService.findAll();
             response.setCode(200);
             response.setMessage("Success");
             response.setData(r);
@@ -49,12 +51,12 @@ public class AccountController {
     public ResponseEntity<?> List(@PathVariable Long id ) {
         HttpStatus statusCode;
         Response response = new Response();
-        if (!accountsRepository.existsById(id)) {
+        if (!accountService.existsById(id)) {
             response.setCode(404);
             response.setMessage("error fetching account");
             statusCode = HttpStatus.NOT_FOUND;
         } else {
-            Optional<Account> a = accountsRepository.findById(id);
+            Optional<Account> a = accountService.findById(id);
             response.setCode(200);
             response.setMessage("error fetching account");
 //            The singletonList() method of java.util.Collections class is used to return an immutable list containing only the specified object.
@@ -68,15 +70,15 @@ public class AccountController {
     public ResponseEntity<?> getAccountsForCustomer(@PathVariable Long id){
         HttpStatus statusCode;
         Response response = new Response();
-        if(!customerRepository.existsById(id)){
+        if(!customerService.existsById(id)){
             response.setCode(404);
             response.setMessage("error fetching customers account");
             statusCode = HttpStatus.NOT_FOUND;
         }else{
 //            Trying to find customers by ID.
-            Optional<Customer> customer = customerRepository.findById(id);
+            Optional<Customer> customer = customerService.findById(id);
             customer.ifPresent(customer1 -> {
-                List<?> y = accountsRepository.findAllByCustomerId(customer.get().getId());
+                List<?> y = accountService.findAllByCustomerId(customer.get().getId());
                 response.setData(y);
             });
             response.setCode(200);
@@ -89,7 +91,7 @@ public class AccountController {
     public ResponseEntity<?> createAccount(@RequestBody Account account, @PathVariable("id") long id){
         Response response = new Response();
         HttpStatus statusCode;
-        Optional<Customer> customer = customerRepository.findById(id);
+        Optional<Customer> customer = customerService.findById(id);
         if(!customer.isPresent()){
             response.setCode(404);
             response.setMessage("error creating customers account");
@@ -97,7 +99,7 @@ public class AccountController {
         }else{
             // account.setCustomerId(id);
 //            StatusCode for 201
-            accountsRepository.save(account);
+            accountService.save(account);
             response.setCode(201);
             ArrayList<Account> accounts = new ArrayList<>();
             accounts.add(account);
@@ -111,18 +113,18 @@ public class AccountController {
     public ResponseEntity<?> upDateAccounts(@RequestBody Account account, @PathVariable("id") long id){
         Response response = new Response();
         HttpStatus statusCode;
-        Optional<Account> g = accountsRepository.findById(id);
-        if(!accountsRepository.existsById(id)){
+        Optional<Account> g = accountService.findById(id);
+        if(!accountService.existsById(id)){
             response.setCode(404);
             response.setMessage("Error");
             statusCode = HttpStatus.NOT_FOUND;
         } else {
-            accountsRepository.deleteById(id);
+            accountService.deleteById(id);
             Account commit = new Account();
             commit.setCustomerId(id);
             commit.setNickname(account.getNickname());
             commit.setType(account.getType());
-            accountsRepository.save(commit);
+            accountService.save(commit);
             response.setCode(200);
             response.setMessage("Customer account updated");
             response.setData(Collections.singletonList(g));
@@ -134,12 +136,12 @@ public class AccountController {
     public ResponseEntity<?> deleteAccounts(@RequestBody Account account, @PathVariable("id") long id){
         Response response = new Response();
         HttpStatus statusCode;
-        if(!accountsRepository.existsById(id)) {
+        if(!accountService.existsById(id)) {
             response.setCode(404);
             response.setMessage("Account does not exists");
             statusCode = HttpStatus.NOT_FOUND;
         }else{
-            accountsRepository.deleteById(id);
+            accountService.deleteById(id);
             response.setCode(202);
             response.setMessage("Accounted successfully deleted");
             statusCode = HttpStatus.ACCEPTED;

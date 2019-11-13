@@ -1,14 +1,12 @@
 package com.BankingAPI.BankingAPI.models;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Address {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="ADDRESS_ID")
     private Long id;
 
     private String street_number;

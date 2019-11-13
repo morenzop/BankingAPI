@@ -6,6 +6,7 @@ import com.BankingAPI.BankingAPI.models.Response;
 import com.BankingAPI.BankingAPI.repositories.AccountsRepository;
 import com.BankingAPI.BankingAPI.repositories.CustomerRepository;
 import com.BankingAPI.BankingAPI.services.CustomerService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,14 +16,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.io.IOException;
+import java.util.*;
 
 @RestController
 public class CustomerController {
+
+    ObjectMapper mapper = new ObjectMapper();
 
     @Autowired
     private CustomerRepository customerRepository;
@@ -37,14 +37,12 @@ public class CustomerController {
     public ResponseEntity<?> getAllCustomers(){
         Response response=new Response();
         HttpStatus statusCode;
-        if (customerRepository.findAll().isEmpty()) {
-            response.setCode(404);
-            response.setMessage("Error fetching accounts");
-            statusCode = HttpStatus.NOT_FOUND;
-        }else{
-
-        }
-        return new ResponseEntity<>(null, HttpStatus.OK);
+        List<Customer> c = customerRepository.findAll();
+        response.setCode(200);
+        response.setMessage("Success");
+        response.setData(c);
+        statusCode = HttpStatus.OK;
+        return new ResponseEntity<>(response, statusCode);
     }
 
     @GetMapping("/accounts/customerId}/customers")
@@ -82,10 +80,16 @@ public class CustomerController {
         return new ResponseEntity<>(response, statusCode);
     }
     @PostMapping("/customers")
-    public ResponseEntity<?> createCustomer(@RequestBody Customer customer){
+    public ResponseEntity<?> createCustomer(@RequestBody Customer customer) throws IOException {
         Response response= new Response();
         response.setCode(201);
         response.setMessage("Customer account created");
+        Customer c = new Customer();
+        c.setFirst_name(customer.getFirst_name());
+        c.setLast_name(customer.getLast_name());
+        c.setEmail(customer.getEmail());
+        c.setId(customer.getId());
+        c.setPassword(customer.getPassword());
         response.setData(new ArrayList<>(Collections.singleton(customer)));
         customerRepository.save(customer);
         return new ResponseEntity<>(response, HttpStatus.CREATED);

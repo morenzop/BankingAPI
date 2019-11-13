@@ -1,7 +1,7 @@
 package com.BankingAPI.BankingAPI.models;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 public class Customer {
@@ -15,8 +15,9 @@ public class Customer {
     private String email;
     private String password;
 
-    @ManyToOne(targetEntity = Address.class)
-    private Set <Address> address;
+    @OneToMany(cascade=CascadeType.ALL)
+    @JoinColumn(name="ADDRESS_ID")
+    private Set<Address> addresses;
 
     public Long getId() {
         return id;
@@ -42,12 +43,12 @@ public class Customer {
         this.last_name = last_name;
     }
 
-    public Set<Address> getAddress() {
-        return address;
+    public void setAddress(Set<Address> addresses){
+        this.addresses = addresses;
     }
 
-    public void setAddress(Set<Address> address) {
-        this.address = address;
+    public Set<Address> getAddress(){
+        return this.addresses;
     }
 
     public String getEmail() {

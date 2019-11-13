@@ -35,11 +35,22 @@ public class AccountService {
         accountsRepository.save(commit);
     }
 
-    public List<?> findAllByCustomerId(Long id) {
+    public List<Account> findAllByCustomerId(Long id) {
         return accountsRepository.findAllByCustomerId(id);
     }
 
     public List<Account> findAll() {
         return accountsRepository.findAll();
+    }
+
+    public void updateAccount(Account account, long id) {
+        Account accountToUpdate = accountsRepository.getOne(id);
+        if (account.getType() != null) accountToUpdate.setType(account.getType());
+        if (account.getNickname() != null) accountToUpdate.setNickname(account.getNickname());
+        if (account.getBalance() != null) accountToUpdate.setBalance(account.getBalance());
+        if (account.getRewards() != null) accountToUpdate.setRewards(account.getRewards());
+
+        accountsRepository.save(accountToUpdate);
+
     }
 }

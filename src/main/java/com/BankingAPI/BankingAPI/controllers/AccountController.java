@@ -18,27 +18,24 @@ import java.util.Optional;
 @RestController
 public class AccountController {
 
-
-
     @Autowired
     private AccountService accountService;
 
     @Autowired
     private CustomerService customerService;
 
-
     @GetMapping("/accounts")
-    public ResponseEntity<?> List(){
+    public ResponseEntity<?> getAllAccounts(){
         HttpStatus statusCode;
         Response response = new Response();
+        List<Account> r = accountService.findAll();
 //        To check if a list is empty add .isEmpty to your method.
-        if(accountService.findAll().isEmpty()){
+        if(r.isEmpty()){
             response.setCode(404);
             response.setMessage("error fetching accounts");
 //            StatusCode for 404.
-                statusCode = HttpStatus.NOT_FOUND;
+            statusCode = HttpStatus.NOT_FOUND;
         }else {
-            List<Account> r = accountService.findAll();
             response.setCode(200);
             response.setMessage("Success");
             response.setData(r);
@@ -47,7 +44,8 @@ public class AccountController {
         }
         return new ResponseEntity<>(response, statusCode);
     }
-    @GetMapping("/account/{id}")
+
+    @GetMapping("/accounts/{id}")
     public ResponseEntity<?> List(@PathVariable Long id ) {
         HttpStatus statusCode;
         Response response = new Response();
@@ -66,7 +64,8 @@ public class AccountController {
         }
         return new ResponseEntity<>(response, statusCode);
     }
-    @GetMapping("/customer/{id}/accounts")
+
+    @GetMapping("/customers/{id}/accounts")
     public ResponseEntity<?> getAccountsForCustomer(@PathVariable Long id){
         HttpStatus statusCode;
         Response response = new Response();
@@ -74,19 +73,17 @@ public class AccountController {
             response.setCode(404);
             response.setMessage("error fetching customers account");
             statusCode = HttpStatus.NOT_FOUND;
-        }else{
+        } else {
 //            Trying to find customers by ID.
-            Optional<Customer> customer = customerService.findById(id);
-            customer.ifPresent(customer1 -> {
-                List<?> y = accountService.findAllByCustomerId(customer.get().getId());
-                response.setData(y);
-            });
+            List<Account> y = accountService.findAllByCustomerId(id);
+            response.setData(y);
             response.setCode(200);
             response.setMessage("Success");
             statusCode = HttpStatus.OK;
         }
         return new ResponseEntity<>(response, statusCode);
     }
+
     @PostMapping("/customers/{id}/accounts")
     public ResponseEntity<?> createAccount(@RequestBody Account account, @PathVariable("id") long id){
         Response response = new Response();
@@ -97,8 +94,8 @@ public class AccountController {
             response.setMessage("error creating customers account");
             statusCode = HttpStatus.NOT_FOUND;
         }else{
-            // account.setCustomerId(id);
 //            StatusCode for 201
+            account.setCustomerId(id);
             accountService.save(account);
             response.setCode(201);
             ArrayList<Account> accounts = new ArrayList<>();
@@ -110,7 +107,7 @@ public class AccountController {
         return new ResponseEntity<>(response, statusCode);
     }
     @PutMapping("/accounts/{id}")
-    public ResponseEntity<?> upDateAccounts(@RequestBody Account account, @PathVariable("id") long id){
+    public ResponseEntity<?> updateAccounts(@RequestBody Account account, @PathVariable("id") long id){
         Response response = new Response();
         HttpStatus statusCode;
         Optional<Account> g = accountService.findById(id);
@@ -119,12 +116,7 @@ public class AccountController {
             response.setMessage("Error");
             statusCode = HttpStatus.NOT_FOUND;
         } else {
-            accountService.deleteById(id);
-            Account commit = new Account();
-            commit.setCustomerId(id);
-            commit.setNickname(account.getNickname());
-            commit.setType(account.getType());
-            accountService.save(commit);
+            accountService.updateAccount(account, id);
             response.setCode(200);
             response.setMessage("Customer account updated");
             response.setData(Collections.singletonList(g));

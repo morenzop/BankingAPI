@@ -10,4 +10,5 @@ import java.util.List;
 public interface BillRepository extends CrudRepository<Bill, Long> {
 
     List<Bill> findAccountById(long accountId);
+
 }

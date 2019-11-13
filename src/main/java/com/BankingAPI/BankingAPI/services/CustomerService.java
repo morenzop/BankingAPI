@@ -22,6 +22,7 @@ public class CustomerService {
         return customerRepository.existsById(id);
     }
 
+
     public List<Customer> findAll() {
         return customerRepository.findAll();
     }
@@ -29,4 +30,6 @@ public class CustomerService {
     public void save(Customer customer) {
         customerRepository.save(customer);
     }
+
 }
+

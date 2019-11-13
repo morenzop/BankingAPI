@@ -36,4 +36,15 @@ public class CustomerService {
     public boolean existsById(Long id) {
         return customerRepository.existsById(id);
     }
+    public void deleteById(long id) {
+        customerRepository.deleteById(id);
+    }
+    public void save(Customer commit) {
+        customerRepository.save(commit);
+    }
+
+    public List<Customer> findAll() {
+        return customerRepository.findAll();
+    }
 }
+

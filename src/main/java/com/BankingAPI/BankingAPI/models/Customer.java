@@ -1,11 +1,5 @@
 package com.BankingAPI.BankingAPI.models;
 
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.type.CollectionType;
-import net.bytebuddy.dynamic.scaffold.MethodGraph;
-
 import javax.persistence.*;
 import java.util.*;
 
@@ -21,10 +15,9 @@ public class Customer {
     private String email;
     private String password;
 
-    // @ManyToOne(targetEntity = Address.class)
-    @Lob
-    @Column(name = "address", columnDefinition="CLOB")
-    private ArrayList<Address> address = new ArrayList<>();
+    @OneToMany(cascade=CascadeType.ALL)
+    @JoinColumn(name="ADDRESS_ID")
+    private Set<Address> addresses;
 
     public Long getId() {
         return id;
@@ -50,12 +43,12 @@ public class Customer {
         this.last_name = last_name;
     }
 
-    public ArrayList<Address> getAddress() {
-        return address;
+    public void setAddress(Set<Address> addresses){
+        this.addresses = addresses;
     }
 
-    public void setAddress(ArrayList<Address> address) {
-        this.address.addAll(address);
+    public Set<Address> getAddress(){
+        return this.addresses;
     }
 
     public String getEmail() {

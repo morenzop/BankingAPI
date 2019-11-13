@@ -1,7 +1,6 @@
 package com.BankingAPI.BankingAPI.controllers;
 
 import com.BankingAPI.BankingAPI.models.Account;
-import com.BankingAPI.BankingAPI.models.Address;
 import com.BankingAPI.BankingAPI.models.Customer;
 import com.BankingAPI.BankingAPI.models.Response;
 import com.BankingAPI.BankingAPI.repositories.AccountsRepository;
@@ -17,8 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-
-import java.io.DataInput;
 import java.io.IOException;
 import java.util.*;
 
@@ -40,12 +37,11 @@ public class CustomerController {
     public ResponseEntity<?> getAllCustomers(){
         Response response=new Response();
         HttpStatus statusCode;
-
-            List<Customer> c = customerRepository.findAll();
-            response.setCode(200);
-            response.setMessage("Success");
-            response.setData(c);
-            statusCode = HttpStatus.OK;
+        List<Customer> c = customerRepository.findAll();
+        response.setCode(200);
+        response.setMessage("Success");
+        response.setData(c);
+        statusCode = HttpStatus.OK;
         return new ResponseEntity<>(response, statusCode);
     }
 
@@ -94,7 +90,6 @@ public class CustomerController {
         c.setEmail(customer.getEmail());
         c.setId(customer.getId());
         c.setPassword(customer.getPassword());
-        // c.setAddress(Arrays.asList(addresses));
         response.setData(new ArrayList<>(Collections.singleton(customer)));
         customerRepository.save(customer);
         return new ResponseEntity<>(response, HttpStatus.CREATED);

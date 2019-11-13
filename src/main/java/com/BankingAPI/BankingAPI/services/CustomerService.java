@@ -21,7 +21,7 @@ public class CustomerService {
     public List<Account> findAccountsByCustomerId(long id){
         List<Account> result = new ArrayList<>();
         for (Account a : accountsRepository.findAll()) {
-            if (a.getCustomer().getId().equals(id)){
+            if (a.getCustomerId() == id){
                 result.add(a);
             }
         }

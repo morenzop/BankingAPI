@@ -15,34 +15,32 @@ public class BillController {
     private BillService billService;
 
     @RequestMapping(method = RequestMethod.GET, value = "/accounts/{accountID}/bills")
-    public List<Bill> getAllBillsForAcc(@PathVariable Long id, @RequestBody Bill bill) {
+    public List<Bill> getAllBillsForAcc(@PathVariable("accountID") Long id, @RequestBody Bill bill) {
         return billService.getAllBillsByAcc(id);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/bills/{billId}")
-    public Optional<Bill> getBillById(@PathVariable Long id) {
+    public Optional<Bill> getBillById(@PathVariable("billId") Long id) {
         return billService.getBillById(id);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/customers/{customerId}/bills")
-    public List<Bill> getAllBillsForCus(@PathVariable Long id, @RequestBody Bill bill) {
+    public List<Bill> getAllBillsForCus(@PathVariable("customerId") Long id, @RequestBody Bill bill) {
         return billService.getAllBillsForCus(id);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/accounts/{accountId}/bills")
-    public void createBill(@RequestBody Bill bill) {
+    public void createBill(@RequestBody Bill bill, @PathVariable("accountId") Long id) {
         billService.createBill(bill);
     }
 
     @RequestMapping(method = RequestMethod.PUT, value =  "/bills/{billId}")
-    public void updateBill(@PathVariable Long id, @RequestBody Bill bill) {
+    public void updateBill(@PathVariable("billId") Long id, @RequestBody Bill bill) {
         billService.updateBill(id, bill);
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/bills/{billId}")
-    public void deleteBill(@RequestBody Long id) {
+    public void deleteBill(@PathVariable("billId") Long id) {
         billService.deleteBill(id);
     }
-
-
 }

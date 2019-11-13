@@ -5,11 +5,13 @@ import com.BankingAPI.BankingAPI.models.Customer;
 import com.BankingAPI.BankingAPI.models.Response;
 import com.BankingAPI.BankingAPI.repositories.AccountsRepository;
 import com.BankingAPI.BankingAPI.repositories.CustomerRepository;
+import com.BankingAPI.BankingAPI.services.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -66,12 +68,11 @@ public class AccountController {
     public ResponseEntity<?> getAccountsForCustomer(@PathVariable Long id){
         HttpStatus statusCode;
         Response response = new Response();
-        if(!accountsRepository.existsById(id)){
+        if(!customerRepository.existsById(id)){
             response.setCode(404);
             response.setMessage("error fetching customers account");
             statusCode = HttpStatus.NOT_FOUND;
         }else{
-            customerRepository.findById(id);
 //            Trying to find customers by ID.
             Optional<Customer> customer = customerRepository.findById(id);
             customer.ifPresent(customer1 -> {
@@ -94,8 +95,13 @@ public class AccountController {
             response.setMessage("error creating customers account");
             statusCode = HttpStatus.NOT_FOUND;
         }else{
-            account.setCustomerId(customer.get().getId());
+            // account.setCustomerId(id);
+//            StatusCode for 201
+            accountsRepository.save(account);
             response.setCode(201);
+            ArrayList<Account> accounts = new ArrayList<>();
+            accounts.add(account);
+            response.setData(accounts);
             response.setMessage("Account created");
             statusCode = HttpStatus.OK;
         }

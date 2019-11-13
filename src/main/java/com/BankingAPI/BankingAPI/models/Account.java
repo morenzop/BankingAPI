@@ -16,7 +16,7 @@ public class Account {
     private String nickname;
     private int rewards;
     private double balance;
-//Defines a single-valued association to another entity that has one-to-one multiplicity
+
     @JsonProperty("customer_id")
     private long customerId;
 

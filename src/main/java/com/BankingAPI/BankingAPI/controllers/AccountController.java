@@ -21,10 +21,10 @@ public class AccountController {
 
 
     @Autowired
-    AccountService accountService;
+    private AccountService accountService;
 
     @Autowired
-    CustomerService customerService;
+    private CustomerService customerService;
 
 
     @GetMapping("/accounts")

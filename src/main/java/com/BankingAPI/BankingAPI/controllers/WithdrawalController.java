@@ -2,7 +2,8 @@ package com.BankingAPI.BankingAPI.controllers;
 
 import com.BankingAPI.BankingAPI.models.Response;
 import com.BankingAPI.BankingAPI.models.Withdrawal;
-import com.BankingAPI.BankingAPI.repositories.WithdrawalsRepository;
+import com.BankingAPI.BankingAPI.services.AccountService;
+import com.BankingAPI.BankingAPI.services.WithdrawalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,11 +18,14 @@ import java.util.Optional;
 public class WithdrawalController {
 
     @Autowired
-    private WithdrawalsRepository withdrawalsRepository;
+    private WithdrawalService withdrawalService;
+
+    @Autowired
+    private AccountService accountService;
 
     @GetMapping("/withdrawals/{id}")
     public ResponseEntity<?> getWithdrawalById(@PathVariable long id){
-        Optional<Withdrawal> d = withdrawalsRepository.findById(id);
+        Optional<Withdrawal> d = withdrawalService.findById(id);
         Response response = new Response();
         response.setCode(200);
         response.setData(new ArrayList<>(Collections.singleton(d)));
@@ -30,7 +34,7 @@ public class WithdrawalController {
 
     @GetMapping("/accounts/{id}/withdrawals")
     public ResponseEntity<?> getWithdrawalsForAccount(@PathVariable String id){
-        List<Withdrawal> d = withdrawalsRepository.findAllByPayerId(id);
+        List<Withdrawal> d = withdrawalService.findAllByAccountId(id);
         Response response = new Response();
         response.setCode(200);
         response.setData(d);
@@ -39,38 +43,31 @@ public class WithdrawalController {
 
     @PostMapping("/accounts/{id}/withdrawals")
     public ResponseEntity<?> createWithdrawal(@RequestBody Withdrawal withdrawal, @PathVariable String id) {
-        Withdrawal submit = new Withdrawal();
-        submit.setAmount(withdrawal.getAmount());
-        submit.setDescription(withdrawal.getDescription());
-        submit.setId(withdrawal.getId());
-        submit.setMedium(withdrawal.getMedium());
-        submit.setTransaction_date(withdrawal.getTransaction_date());
-        submit.setType(withdrawal.getType());
-        submit.setStatus(withdrawal.getStatus());
-        submit.setPayerId(id);
-        withdrawalsRepository.save(submit);
-        return new ResponseEntity<>(null, HttpStatus.OK);
+        Response response = new Response();
+        HttpStatus statusCode;
+        if (!accountService.existsById(Long.parseLong(id))) {
+            response.setCode(404);
+            response.setMessage("Error creating withdrawal: Account not found.");
+            statusCode = HttpStatus.NOT_FOUND;
+        } else {
+            response.setCode(201);
+            Withdrawal submit = withdrawalService.createWithdrawal(withdrawal, id);
+            response.setData(new ArrayList<>(Collections.singleton(submit)));
+            statusCode = HttpStatus.CREATED;
+        }
+        return new ResponseEntity<>(response, statusCode);
     }
 
     @PutMapping("/withdrawals/{id}")
     public ResponseEntity<?> updateWithdrawal(@RequestBody Withdrawal withdrawal, @PathVariable Long id) {
-        withdrawalsRepository.deleteById(id);
-        Withdrawal submit = new Withdrawal();
-        submit.setAmount(withdrawal.getAmount());
-        submit.setDescription(withdrawal.getDescription());
-        submit.setId(id);
-        submit.setMedium(withdrawal.getMedium());
-        submit.setTransaction_date(withdrawal.getTransaction_date());
-        submit.setType(withdrawal.getType());
-        submit.setStatus(withdrawal.getStatus());
-        submit.setPayerId(withdrawal.getPayerId());
-        withdrawalsRepository.save(submit);
+        withdrawalService.deleteById(id);
+        withdrawalService.updateWithdrawal(withdrawal, id);
         return new ResponseEntity<>(null, HttpStatus.OK);
     }
 
     @DeleteMapping("/withdrawals/{id}")
     public ResponseEntity<?> deleteWithdrawal(@PathVariable Long id) {
-        withdrawalsRepository.deleteById(id);
+        withdrawalService.deleteById(id);
         return new ResponseEntity<>(null, HttpStatus.OK);
     }
 }

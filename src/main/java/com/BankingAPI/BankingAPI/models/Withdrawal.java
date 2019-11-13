@@ -11,7 +11,7 @@ import javax.persistence.*;
 public class Withdrawal {
     @Id
     @GeneratedValue
-    @JsonProperty("_id")
+    @JsonProperty("id")
     Long id;
 
     @Enumerated(EnumType.STRING)

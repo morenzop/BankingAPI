@@ -23,16 +23,14 @@ public class WithdrawalService {
     }
 
     public void updateWithdrawal(Withdrawal withdrawal, long id) {
-        Withdrawal submit = new Withdrawal();
-        submit.setAmount(withdrawal.getAmount());
-        submit.setDescription(withdrawal.getDescription());
-        submit.setId(withdrawal.getId());
-        submit.setMedium(withdrawal.getMedium());
-        submit.setTransaction_date(withdrawal.getTransaction_date());
-        submit.setType(withdrawal.getType());
-        submit.setStatus(withdrawal.getStatus());
-        submit.setPayerId(Long.toString(id));
-        withdrawalsRepository.save(submit);
+        Withdrawal withdrawalToUpdate = withdrawalsRepository.getOne(id);
+        if (withdrawal.getType() != null) withdrawalToUpdate.setType(withdrawal.getType());
+        if (withdrawal.getAmount() != null) withdrawalToUpdate.setAmount(withdrawal.getAmount());
+        if (withdrawal.getTransaction_date() != null) withdrawalToUpdate.setTransaction_date(withdrawal.getTransaction_date());
+        if (withdrawal.getStatus() != null) withdrawalToUpdate.setStatus(withdrawal.getStatus());
+        if (withdrawal.getMedium() != null) withdrawalToUpdate.setMedium(withdrawal.getMedium());
+        if (withdrawal.getDescription() != null) withdrawalToUpdate.setDescription(withdrawal.getDescription());
+        withdrawalsRepository.save(withdrawalToUpdate);
     }
 
     public void deleteById(Long id) {

@@ -32,16 +32,14 @@ public class DepositService {
     }
 
     public void updateDeposit(Deposit deposit, long id) {
-        Deposit submit = new Deposit();
-        submit.setAmount(deposit.getAmount());
-        submit.setDescription(deposit.getDescription());
-        submit.setId(id);
-        submit.setMedium(deposit.getMedium());
-        submit.setTransaction_date(deposit.getTransaction_date());
-        submit.setType(deposit.getType());
-        submit.setStatus(deposit.getStatus());
-        submit.setPayeeId(deposit.getPayeeId());
-        depositsRepository.save(submit);
+        Deposit depositToUpdate = depositsRepository.getOne(id);
+        if (deposit.getType() != null) depositToUpdate.setType(deposit.getType());
+        if (deposit.getAmount() != null) depositToUpdate.setAmount(deposit.getAmount());
+        if (deposit.getTransaction_date() != null) depositToUpdate.setTransaction_date(deposit.getTransaction_date());
+        if (deposit.getStatus() != null) depositToUpdate.setStatus(deposit.getStatus());
+        if (deposit.getMedium() != null) depositToUpdate.setMedium(deposit.getMedium());
+        if (deposit.getDescription() != null) depositToUpdate.setDescription(deposit.getDescription());
+        depositsRepository.save(depositToUpdate);
     }
 
     public void deleteById(Long id) {

@@ -10,7 +10,7 @@ import javax.persistence.*;
 public class Deposit {
     @Id
     @GeneratedValue
-    @JsonProperty("_id")
+    @JsonProperty("id")
     Long id;
 
     @Enumerated(EnumType.STRING)

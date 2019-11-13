@@ -14,6 +14,7 @@ import java.util.Optional;
 @Component
 public class CustomerService {
 
+    @Autowired
     private CustomerRepository customerRepository;
 
     @Autowired

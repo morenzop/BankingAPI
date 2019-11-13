@@ -4,6 +4,8 @@ import com.BankingAPI.BankingAPI.models.Deposit;
 import com.BankingAPI.BankingAPI.models.Response;
 import com.BankingAPI.BankingAPI.repositories.AccountsRepository;
 import com.BankingAPI.BankingAPI.repositories.DepositsRepository;
+import com.BankingAPI.BankingAPI.services.AccountService;
+import com.BankingAPI.BankingAPI.services.DepositService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,66 +20,41 @@ import java.util.Optional;
 public class DepositController {
 
     @Autowired
-    private DepositsRepository depositsRepository;
+    private DepositService depositService;
 
     @Autowired
-    private AccountsRepository accountsRepository;
+    private AccountService accountService;
 
     @GetMapping("/deposits/{id}")
-    public ResponseEntity<?> getDepositById(@PathVariable long id) {
-        HttpStatus statusCode;
+    public ResponseEntity<?> getDepositById(@PathVariable long id){
+        Optional<Deposit> d = depositService.findById(id);
         Response response = new Response();
-        if (!depositsRepository.existsById(id)) {
-            response.setCode(404);
-            response.setMessage("Error fetching withdrawal with id: " + id);
-            statusCode = HttpStatus.NOT_FOUND;
-        } else {
-            Optional<Deposit> d = depositsRepository.findById(id);
-            response.setCode(200);
-            response.setData(new ArrayList<>(Collections.singleton(d)));
-            statusCode = HttpStatus.OK;
-        }
-        return new ResponseEntity<>(response, statusCode);
+        response.setCode(200);
+        response.setData(new ArrayList<>(Collections.singleton(d)));
+        return new ResponseEntity<>(d, HttpStatus.OK);
     }
 
     @GetMapping("/accounts/{id}/deposits")
     public ResponseEntity<?> getDepositsForAccount(@PathVariable String id){
+        List<Deposit> d = depositService.findAllByAccountId(id);
         Response response = new Response();
-        HttpStatus statusCode;
-        if (!accountsRepository.existsById(Long.parseLong(id))){
-            response.setCode(404);
-            response.setMessage("Account not found");
-            statusCode = HttpStatus.NOT_FOUND;
-        } else {
-            List<Deposit> d = depositsRepository.findAllByPayeeId(id);
-            response.setCode(200);
-            response.setData(d);
-            statusCode = HttpStatus.OK;
-        }
-        return new ResponseEntity<>(response, statusCode);
+        response.setCode(200);
+        response.setData(d);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/accounts/{id}/deposits")
     public ResponseEntity<?> createDeposit(@RequestBody Deposit deposit, @PathVariable String id) {
         Response response = new Response();
         HttpStatus statusCode;
-        if (!accountsRepository.existsById(Long.parseLong(id))) {
+        if (!accountService.existsById(Long.parseLong(id))) {
             response.setCode(404);
             response.setMessage("Error creating deposit: Account not found.");
             statusCode = HttpStatus.NOT_FOUND;
         } else {
             response.setCode(201);
-            response.setData(new ArrayList<>(Collections.singleton(deposit)));
-            Deposit submit = new Deposit();
-            submit.setAmount(deposit.getAmount());
-            submit.setDescription(deposit.getDescription());
-            submit.setId(deposit.getId());
-            submit.setMedium(deposit.getMedium());
-            submit.setTransaction_date(deposit.getTransaction_date());
-            submit.setType(deposit.getType());
-            submit.setStatus(deposit.getStatus());
-            submit.setPayeeId(id);
-            depositsRepository.save(submit);
+            Deposit submit = depositService.createDeposit(deposit, id);
+            response.setData(new ArrayList<>(Collections.singleton(submit)));
             statusCode = HttpStatus.CREATED;
         }
         return new ResponseEntity<>(response, statusCode);
@@ -85,44 +62,14 @@ public class DepositController {
 
     @PutMapping("/deposits/{id}")
     public ResponseEntity<?> updateDeposit(@RequestBody Deposit deposit, @PathVariable Long id) {
-        Response response = new Response();
-        HttpStatus statusCode;
-        if (!depositsRepository.existsById(id)) {
-            response.setCode(404);
-            response.setMessage("Error creating deposit: Account not found.");
-            statusCode = HttpStatus.NOT_FOUND;
-        } else {
-            depositsRepository.deleteById(id);
-            Deposit submit = new Deposit();
-            submit.setAmount(deposit.getAmount());
-            submit.setDescription(deposit.getDescription());
-            submit.setId(id);
-            submit.setMedium(deposit.getMedium());
-            submit.setTransaction_date(deposit.getTransaction_date());
-            submit.setType(deposit.getType());
-            submit.setStatus(deposit.getStatus());
-            submit.setPayeeId(deposit.getPayeeId());
-            depositsRepository.save(submit);
-            response.setCode(202);
-            response.setMessage("Accepted deposit modification");
-            statusCode = HttpStatus.ACCEPTED;
-        }
-        return new ResponseEntity<>(response, statusCode);
+        depositService.deleteById(id);
+        depositService.updateDeposit(deposit, id);
+        return new ResponseEntity<>(null, HttpStatus.OK);
     }
 
     @DeleteMapping("/deposits/{id}")
     public ResponseEntity<?> deleteDeposit(@PathVariable Long id) {
-        Response response = new Response();
-        HttpStatus statusCode;
-        if (!depositsRepository.existsById(id)) {
-            response.setCode(404);
-            response.setMessage("This ID does not exist in deposits");
-            statusCode = HttpStatus.NOT_FOUND;
-            return new ResponseEntity<>(response, statusCode);
-        } else {
-            depositsRepository.deleteById(id);
-            statusCode = HttpStatus.NO_CONTENT;
-            return new ResponseEntity<>(null, statusCode);
-        }
+        depositService.deleteById(id);
+        return new ResponseEntity<>(null, HttpStatus.OK);
     }
 }

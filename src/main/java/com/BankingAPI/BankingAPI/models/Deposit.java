@@ -1,7 +1,6 @@
 package com.BankingAPI.BankingAPI.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
@@ -9,12 +8,12 @@ import javax.persistence.*;
 @Entity
 public class Deposit {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonProperty("id")
     Long id;
 
     @Enumerated(EnumType.STRING)
-    private TransactionType type;
+    private DepositType type;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd-yyyy")
     private String transaction_date;
@@ -23,10 +22,11 @@ public class Deposit {
     private TransactionStatus status;
 
     @JsonProperty("payee_id")
-    private String payeeId;
+    @Column(name = "payee_id")
+    private Long payeeId;
 
     @Enumerated(EnumType.STRING)
-    private TransactionMeduim medium;
+    private TransactionMedium medium;
 
     private Double amount;
 
@@ -40,11 +40,11 @@ public class Deposit {
         this.id = id;
     }
 
-    public TransactionType getType() {
+    public DepositType getType() {
         return type;
     }
 
-    public void setType(TransactionType type) {
+    public void setType(DepositType type) {
         this.type = type;
     }
 
@@ -64,19 +64,19 @@ public class Deposit {
         this.status = status;
     }
 
-    public String getPayeeId() {
+    public Long getPayeeId() {
         return payeeId;
     }
 
-    public void setPayeeId(String payeeId) {
+    public void setPayeeId(Long payeeId) {
         this.payeeId = payeeId;
     }
 
-    public TransactionMeduim getMedium() {
+    public TransactionMedium getMedium() {
         return medium;
     }
 
-    public void setMedium(TransactionMeduim medium) {
+    public void setMedium(TransactionMedium medium) {
         this.medium = medium;
     }
 

@@ -1,5 +1,8 @@
 package com.BankingAPI.BankingAPI.services;
 
+import com.BankingAPI.BankingAPI.models.Account;
+import com.BankingAPI.BankingAPI.models.TransactionMedium;
+import com.BankingAPI.BankingAPI.models.TransactionStatus;
 import com.BankingAPI.BankingAPI.models.Withdrawal;
 import com.BankingAPI.BankingAPI.repositories.WithdrawalsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +17,7 @@ public class WithdrawalService {
     @Autowired
     private WithdrawalsRepository withdrawalsRepository;
 
-    public List<Withdrawal> findAllByAccountId(String id){
+    public List<Withdrawal> findAllByAccountId(Long id){
         return withdrawalsRepository.findAllByPayerId(id);
     }
 
@@ -24,6 +27,7 @@ public class WithdrawalService {
 
     public void updateWithdrawal(Withdrawal withdrawal, long id) {
         Withdrawal withdrawalToUpdate = withdrawalsRepository.getOne(id);
+        
         if (withdrawal.getType() != null) withdrawalToUpdate.setType(withdrawal.getType());
         if (withdrawal.getAmount() != null) withdrawalToUpdate.setAmount(withdrawal.getAmount());
         if (withdrawal.getTransaction_date() != null) withdrawalToUpdate.setTransaction_date(withdrawal.getTransaction_date());
@@ -37,7 +41,7 @@ public class WithdrawalService {
         withdrawalsRepository.deleteById(id);
     }
 
-    public Withdrawal createWithdrawal(Withdrawal withdrawal, String id) {
+    public Withdrawal createWithdrawal(Withdrawal withdrawal, Long id) {
         Withdrawal submit = new Withdrawal();
         submit.setAmount(withdrawal.getAmount());
         submit.setDescription(withdrawal.getDescription());
@@ -47,6 +51,7 @@ public class WithdrawalService {
         submit.setType(withdrawal.getType());
         submit.setStatus(withdrawal.getStatus());
         submit.setPayerId(id);
+        
         withdrawalsRepository.save(submit);
         return submit;
     }

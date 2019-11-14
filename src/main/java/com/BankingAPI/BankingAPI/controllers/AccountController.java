@@ -10,10 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 public class AccountController {
@@ -96,12 +93,16 @@ public class AccountController {
         }else{
 //            StatusCode for 201
             account.setCustomerId(id);
+            account.setBalance(0.0);
             accountService.save(account);
             response.setCode(201);
-            ArrayList<Account> accounts = new ArrayList<>();
-            accounts.add(account);
-            response.setData(accounts);
-            response.setMessage("Account created");
+
+            //TODO: figure out why this line gives a null pointer error
+
+            List<Account> r = accountService.findAll();
+            // response.setData(Collections.singletonList(accountService.findById(account.getId())));
+            response.setData(r);
+            response.setMessage("Account created.");
             statusCode = HttpStatus.OK;
         }
         return new ResponseEntity<>(response, statusCode);

@@ -10,12 +10,12 @@ import javax.persistence.*;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Withdrawal {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonProperty("id")
     Long id;
 
     @Enumerated(EnumType.STRING)
-    private TransactionType type;
+    private WithdrawalType type;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd-yyyy")
     private String transaction_date;
@@ -24,10 +24,11 @@ public class Withdrawal {
     private TransactionStatus status;
 
     @JsonProperty("payer_id")
-    private String payerId;
+    @Column(name = "payer_id")
+    private Long payerId;
 
     @Enumerated(EnumType.STRING)
-    private TransactionMeduim medium;
+    private TransactionMedium medium;
 
     private Double amount;
 
@@ -41,11 +42,11 @@ public class Withdrawal {
         this.id = id;
     }
 
-    public TransactionType getType() {
+    public WithdrawalType getType() {
         return type;
     }
 
-    public void setType(TransactionType type) {
+    public void setType(WithdrawalType type) {
         this.type = type;
     }
 
@@ -65,19 +66,19 @@ public class Withdrawal {
         this.status = status;
     }
 
-    public String getPayerId() {
+    public Long getPayerId() {
         return payerId;
     }
 
-    public void setPayerId(String payerId) {
+    public void setPayerId(Long payerId) {
         this.payerId = payerId;
     }
 
-    public TransactionMeduim getMedium() {
+    public TransactionMedium getMedium() {
         return medium;
     }
 
-    public void setMedium(TransactionMeduim medium) {
+    public void setMedium(TransactionMedium medium) {
         this.medium = medium;
     }
 

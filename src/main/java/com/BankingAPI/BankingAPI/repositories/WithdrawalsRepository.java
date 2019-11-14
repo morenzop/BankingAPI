@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface WithdrawalsRepository extends JpaRepository<Withdrawal, Long> {
 
-    List<Withdrawal> findAllByPayerId(String payerId);
+    List<Withdrawal> findAllByPayerId(Long payerId);
 }

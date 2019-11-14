@@ -7,7 +7,7 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Response {
     private int code;
-    private List data;
+    private List<?> data;
     private String message = null;
 
     public int getCode() {
@@ -18,11 +18,11 @@ public class Response {
         this.code = code;
     }
 
-    public List getData() {
+    public List<?> getData() {
         return data;
     }
 
-    public void setData(List data) {
+    public void setData(List<?> data) {
         this.data = data;
     }
 

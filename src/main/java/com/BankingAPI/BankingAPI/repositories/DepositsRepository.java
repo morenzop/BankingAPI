@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface DepositsRepository extends JpaRepository<Deposit, Long> {
 
-    List<Deposit> findAllByPayeeId(String payeeId);
+    List<Deposit> findAllByPayeeId(Long payeeId);
 }

@@ -1,7 +1,6 @@
 package com.BankingAPI.BankingAPI.services;
 
-import com.BankingAPI.BankingAPI.models.Deposit;
-import com.BankingAPI.BankingAPI.models.Withdrawal;
+import com.BankingAPI.BankingAPI.models.*;
 import com.BankingAPI.BankingAPI.repositories.DepositsRepository;
 import com.BankingAPI.BankingAPI.repositories.WithdrawalsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +22,7 @@ public class DepositService {
     @Autowired
     private DepositsRepository depositsRepository;
 
-    public List<Deposit> findAllByAccountId(String id){
+    public List<Deposit> findAllByAccountId(Long id){
         return depositsRepository.findAllByPayeeId(id);
     }
 
@@ -46,7 +45,7 @@ public class DepositService {
         depositsRepository.deleteById(id);
     }
 
-    public Deposit createDeposit(Deposit deposit, String id) {
+    public Deposit createDeposit(Deposit deposit, Long id) {
         Deposit submit = new Deposit();
         submit.setAmount(deposit.getAmount());
         submit.setDescription(deposit.getDescription());
@@ -56,6 +55,7 @@ public class DepositService {
         submit.setType(deposit.getType());
         submit.setStatus(deposit.getStatus());
         submit.setPayeeId(id);
+
         depositsRepository.save(submit);
         return submit;
     }

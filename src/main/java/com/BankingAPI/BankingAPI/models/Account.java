@@ -1,20 +1,34 @@
 package com.BankingAPI.BankingAPI.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
+import java.util.Set;
 
 //an entity represents a table in a relational database, and each entity instance corresponds to a row in that table
 @Entity
 public class Account {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 // A list of named constant and defines a class type, Enumerations can have constructors, methods and instance variables.
     @Enumerated(EnumType.STRING)
     private AccountType type;
     private String nickname;
-    private int rewards;
+    private Integer rewards;
+
+    @JsonIgnore
+    @OneToMany(cascade=CascadeType.ALL)
+    @JoinColumn(name="payee_id")
+    private Set<Deposit> deposits;
+
+    @JsonIgnore
+    @OneToMany(cascade=CascadeType.ALL)
+    @JoinColumn(name="payer_id")
+    private Set<Withdrawal> withdrawals;
+
     private double balance;
 
     @JsonProperty("customer_id")
@@ -44,15 +58,20 @@ public class Account {
         this.nickname = nickname;
     }
 
-    public Integer getRewards() {
-        return rewards;
-    }
-
-    public void setRewards(Integer rewards) {
-        this.rewards = rewards;
-    }
-
     public Double getBalance() {
+        Double balance = 0.0;
+        if (deposits != null) {
+            for (Deposit i : deposits) {
+                if (i.getMedium().equals(TransactionMedium.Balance) && i.getStatus().equals(TransactionStatus.Completed))
+                    balance += i.getAmount();
+            }
+        }
+        if (withdrawals != null) {
+            for (Withdrawal i : withdrawals) {
+                if (i.getMedium().equals(TransactionMedium.Balance) && i.getStatus().equals(TransactionStatus.Completed))
+                    balance -= i.getAmount();
+            }
+        }
         return balance;
     }
 
@@ -68,15 +87,27 @@ public class Account {
         this.customerId = customerId;
     }
 
-    /*@Override
-    public String toString() {
-        return "Account{" +
-                "id=" + id +
-                ", type=" + type +
-                ", nickname='" + nickname + '\'' +
-                ", rewards=" + rewards +
-                ", balance=" + balance +
-                ", customer=" + customer +
-                '}';
-    }*/
+    public void setRewards(Integer rewards) {
+        this.rewards = rewards;
+    }
+
+    public Integer getRewards() {
+        return this.rewards;
+    }
+
+    public Set<Deposit> getDeposits() {
+        return deposits;
+    }
+
+    public void setDeposits(Set<Deposit> deposits) {
+        this.deposits = deposits;
+    }
+
+    public Set<Withdrawal> getWithdrawals() {
+        return withdrawals;
+    }
+
+    public void setWithdrawals(Set<Withdrawal> withdrawals) {
+        this.withdrawals = withdrawals;
+    }
 }

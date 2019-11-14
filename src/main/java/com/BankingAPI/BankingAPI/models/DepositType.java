@@ -1,7 +1,6 @@
 package com.BankingAPI.BankingAPI.models;
 
-public enum TransactionType {
-    P2p,
+public enum DepositType {
     Deposit,
-    Withdrawal
+    P2p
 }

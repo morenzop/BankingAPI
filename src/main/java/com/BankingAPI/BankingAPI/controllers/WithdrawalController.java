@@ -1,7 +1,6 @@
 package com.BankingAPI.BankingAPI.controllers;
 
-import com.BankingAPI.BankingAPI.models.Response;
-import com.BankingAPI.BankingAPI.models.Withdrawal;
+import com.BankingAPI.BankingAPI.models.*;
 import com.BankingAPI.BankingAPI.services.AccountService;
 import com.BankingAPI.BankingAPI.services.WithdrawalService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +32,7 @@ public class WithdrawalController {
     }
 
     @GetMapping("/accounts/{id}/withdrawals")
-    public ResponseEntity<?> getWithdrawalsForAccount(@PathVariable String id){
+    public ResponseEntity<?> getWithdrawalsForAccount(@PathVariable Long id){
         List<Withdrawal> d = withdrawalService.findAllByAccountId(id);
         Response response = new Response();
         response.setCode(200);
@@ -42,14 +41,23 @@ public class WithdrawalController {
     }
 
     @PostMapping("/accounts/{id}/withdrawals")
-    public ResponseEntity<?> createWithdrawal(@RequestBody Withdrawal withdrawal, @PathVariable String id) {
+    public ResponseEntity<?> createWithdrawal(@RequestBody Withdrawal withdrawal, @PathVariable Long id) {
         Response response = new Response();
         HttpStatus statusCode;
-        if (!accountService.existsById(Long.parseLong(id))) {
+        Optional<Account> account = accountService.findById(id);
+        if (!account.isPresent()) {
             response.setCode(404);
             response.setMessage("Error creating withdrawal: Account not found.");
             statusCode = HttpStatus.NOT_FOUND;
         } else {
+            if (withdrawal.getMedium().equals(TransactionMedium.Balance) && withdrawal.getStatus().equals(TransactionStatus.Completed)){
+                Double oldBalance = account.get().getBalance();
+                Double newBalance = oldBalance - withdrawal.getAmount();
+                Account updatedAccount = new Account();
+                updatedAccount.setBalance(newBalance);
+                accountService.updateAccount(updatedAccount, account.get().getId());
+            }
+
             response.setCode(201);
             Withdrawal submit = withdrawalService.createWithdrawal(withdrawal, id);
             response.setData(new ArrayList<>(Collections.singleton(submit)));

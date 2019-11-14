@@ -1,9 +1,6 @@
 package com.BankingAPI.BankingAPI.controllers;
 
-import com.BankingAPI.BankingAPI.models.Deposit;
-import com.BankingAPI.BankingAPI.models.Response;
-import com.BankingAPI.BankingAPI.repositories.AccountsRepository;
-import com.BankingAPI.BankingAPI.repositories.DepositsRepository;
+import com.BankingAPI.BankingAPI.models.*;
 import com.BankingAPI.BankingAPI.services.AccountService;
 import com.BankingAPI.BankingAPI.services.DepositService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +32,7 @@ public class DepositController {
     }
 
     @GetMapping("/accounts/{id}/deposits")
-    public ResponseEntity<?> getDepositsForAccount(@PathVariable String id){
+    public ResponseEntity<?> getDepositsForAccount(@PathVariable Long id){
         List<Deposit> d = depositService.findAllByAccountId(id);
         Response response = new Response();
         response.setCode(200);
@@ -44,10 +41,11 @@ public class DepositController {
     }
 
     @PostMapping("/accounts/{id}/deposits")
-    public ResponseEntity<?> createDeposit(@RequestBody Deposit deposit, @PathVariable String id) {
+    public ResponseEntity<?> createDeposit(@RequestBody Deposit deposit, @PathVariable Long id) {
         Response response = new Response();
         HttpStatus statusCode;
-        if (!accountService.existsById(Long.parseLong(id))) {
+        Optional<Account> account = accountService.findById(id);
+        if (!account.isPresent()) {
             response.setCode(404);
             response.setMessage("Error creating deposit: Account not found.");
             statusCode = HttpStatus.NOT_FOUND;

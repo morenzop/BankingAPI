@@ -51,4 +51,13 @@ public class BillService {
         return billRepository.existsById(id);
     }
 
+    public Optional<Bill> findById(Long id) {
+
+        return billRepository.findById(id);
+    }
+
+    public Optional<Bill> findAllByPayeeId(Long id) {
+
+        return billRepository.findById(id);
+    }
 }

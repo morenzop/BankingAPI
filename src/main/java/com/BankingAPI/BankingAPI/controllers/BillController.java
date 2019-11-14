@@ -29,9 +29,9 @@ public class BillController {
             response.setMessage("error fetching bills");
             statusCode = HttpStatus.NOT_FOUND;
         }else{
-            List<Deposit> billServiceAllByPayeeId = billService.findAllByPayeeId(id);
+            Optional<Bill> billServiceAllByPayeeId = billService.findAllByPayeeId(id);
             response.setCode(200);
-            response.setData(billServiceAllByPayeeId);
+            response.setData(Collections.singletonList(billServiceAllByPayeeId));
             statusCode = HttpStatus.OK;
         }
 
@@ -47,7 +47,7 @@ public class BillController {
             response.setMessage("error fetching bill with id: " + id);
             statusCode = HttpStatus.NOT_FOUND;
         } else {
-            Optional<Deposit> bill = billService.findById(id);
+            Optional<Bill> bill = billService.findById(id);
             response.setCode(200);
             response.setData(new ArrayList<>(Collections.singleton(bill)));
             statusCode = HttpStatus.OK;
@@ -66,7 +66,7 @@ public class BillController {
             response.setMessage("error fetching bills");
             statusCode = HttpStatus.NOT_FOUND;
         }else{
-            Optional<Deposit> bill = billService.findById(id);
+            Optional<Bill> bill = billService.findById(id);
             response.setCode(200);
             response.setData(new ArrayList<>(Collections.singleton(bill)));
             statusCode = HttpStatus.OK;
